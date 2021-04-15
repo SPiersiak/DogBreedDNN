@@ -29,11 +29,12 @@ def main_window():
 
 
 def move_to_second_label():
-    main_label.pack_forget()
     # Take image form user class
     z = img.upload_image()
-    second_label.pack()
-    second_window(z)
+    if z is not None:
+        main_label.pack_forget()
+        second_label.pack()
+        second_window(z)
 
 
 def move_to_first_label():
@@ -46,7 +47,7 @@ def second_window(im):
     second_label.place(x=0, y=0, relwidth=1, relheight=1)
     # Create text
     b_text = Label(second_label, text="Your dog is ...",
-                   font=("SimSun", 50), fg="black", bg="#f4ead9")
+                   font=("SimSun", 50), fg="black", bg="#faf0de")
     b_text.place(relx=0.75, rely=0.1, anchor="center")
 
     # Place for image
@@ -54,18 +55,19 @@ def second_window(im):
     image_holder.image = im
     image_holder.place(relx=0.2, rely=0.5, anchor="center")
 
-    # Place for the answer
+    # Text attribute - a place for the answer from the algorithm
     a_text = Label(second_label, text="",
-                   font=("SimSun", 50), fg="black", bg="#f4ead9")
+                    font=("SimSun", 50), fg="black", bg="#fdf3e1")
     a_text.place(relx=0.60, rely=0.5, anchor="w")
 
     # Check button
     check_button = Button(second_label, text="Check it out.", font=("Segoe UI", 50), bg='#fffff5',
                           activebackground='#fffff5')
     check_button.place(relx=0.71, rely=0.79, anchor="center")
-
     # Back Button
     back_button = Button(second_label, text="Back", font=("Segoe UI", 40), bg='#fffff5',
                          activebackground='#fffff5', command=move_to_first_label)
     back_button.place(relx=0.1, rely=0.07, anchor="center")
     second_label.pack()
+
+
