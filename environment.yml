@@ -11,7 +11,7 @@ dependencies:
   - blas=1.0=mkl
   - blinker=1.4=py38haa95532_0
   - brotlipy=0.7.0=py38h2bbff1b_1003
-  - ca-certificates=2021.1.19=haa95532_1
+  - ca-certificates=2021.4.13=haa95532_1
   - cachetools=4.2.1=pyhd3eb1b0_0
   - certifi=2020.12.5=py38haa95532_0
   - cffi=1.14.5=py38hcd4344a_0
@@ -37,6 +37,7 @@ dependencies:
   - keras-applications=1.0.8=py_1
   - keras-base=2.4.3=py_0
   - keras-preprocessing=1.1.2=pyhd3eb1b0_0
+  - libopencv=4.0.1=hbb9e17c_0
   - libpng=1.6.37=h2a8f88b_0
   - libprotobuf=3.14.0=h23ce68f_0
   - libtiff=4.1.0=h56a325e_1
@@ -51,12 +52,14 @@ dependencies:
   - numpy-base=1.19.2=py38ha3acd2a_0
   - oauthlib=3.1.0=py_0
   - olefile=0.46=py_0
+  - opencv=4.0.1=py38h2a7c758_0
   - openssl=1.1.1k=h2bbff1b_0
   - opt_einsum=3.1.0=py_0
   - pandas=1.2.3=py38hf11a4ad_0
   - pillow=8.2.0=py38h4fa10fc_0
   - pip=21.0.1=py38haa95532_0
   - protobuf=3.14.0=py38hd77b12b_1
+  - py-opencv=4.0.1=py38he44ac1e_0
   - pyasn1=0.4.8=py_0
   - pyasn1-modules=0.2.8=py_0
   - pycparser=2.20=py_2
@@ -82,6 +85,7 @@ dependencies:
   - tensorflow-estimator=2.3.0=pyheb71bc4_0
   - termcolor=1.1.0=py38haa95532_1
   - tk=8.6.10=he774522_0
+  - tqdm=4.59.0=pyhd3eb1b0_1
   - typing-extensions=3.7.4.3=hd3eb1b0_0
   - typing_extensions=3.7.4.3=pyh06a4308_0
   - urllib3=1.26.4=pyhd3eb1b0_0
@@ -98,3 +102,4 @@ dependencies:
   - zipp=3.4.1=pyhd3eb1b0_0
   - zlib=1.2.11=h62dcd97_4
   - zstd=1.4.9=h19a0ad4_0
+prefix: D:\Anaconda\envs\DogBreedDNN
