@@ -8,7 +8,7 @@ def upload_image():
     uploaded_image = None
     ret = uploaded_image
     try:
-        file_path = filedialog.askopenfilename()
+        file_path = filedialog.askopenfilename(filetypes=(('png files', '*.png'), ('jpg files', '*.jpg')))
         if file_path:
             uploaded_image = Image.open(file_path)
             uploaded_image = uploaded_image.resize(DEFAULT_RESOLUTION, Image.ANTIALIAS)

@@ -2,6 +2,9 @@ from tkinter import *
 import Img as img
 
 root = Tk()
+# Define min and max window size
+root.minsize(1100, 650)
+root.maxsize(1920, 1080)
 root.title('Dog Breed')
 root.geometry("1920x1080")
 
@@ -13,6 +16,16 @@ second_label = Label(root, image=bg)
 
 
 def main_window():
+    def resize(e):
+        # adjust font size to window size
+        # print(e)
+        if e.width > 1600:
+            banner_text.config(font=("SimSun", int(50)))
+            take_photo_button.config(font=("Segoe UI", int(50)))
+        elif 1400 >= e.width > 900:
+            banner_text.config(font=("SimSun", int(30)))
+            take_photo_button.config(font=("Segoe UI", int(30)))
+
     main_label.place(x=0, y=0, relwidth=1, relheight=1)
     # Create text
     banner_text = Label(main_label, text="You don't know what breed you dog is? Check it out now!",
@@ -24,6 +37,7 @@ def main_window():
                                activebackground='#fffff5', command=move_to_second_label)
     take_photo_button.place(relx=0.5, rely=0.75, anchor="center")
 
+    root.bind('<Configure>', resize)
     main_label.pack()
     root.mainloop()
 
@@ -44,6 +58,20 @@ def move_to_first_label():
 
 
 def second_window(im):
+    def resize(e):
+        # adjust font size to window size
+        # print(e)
+        if e.width > 1600:
+            b_text.config(font=("SimSun", int(50)))
+            a_text.config(font=("Segoe UI", int(50)))
+            check_button.config(font=("Segoe UI", int(50)))
+            back_button.config(font=("Segoe UI", int(50)))
+        elif 1400 >= e.width > 900:
+            b_text.config(font=("SimSun", int(30)))
+            a_text.config(font=("Segoe UI", int(30)))
+            check_button.config(font=("Segoe UI", int(30)))
+            back_button.config(font=("Segoe UI", int(30)))
+
     second_label.place(x=0, y=0, relwidth=1, relheight=1)
     # Create text
     b_text = Label(second_label, text="Your dog is ...",
@@ -68,6 +96,7 @@ def second_window(im):
     back_button = Button(second_label, text="Back", font=("Segoe UI", 40), bg='#fffff5',
                          activebackground='#fffff5', command=move_to_first_label)
     back_button.place(relx=0.1, rely=0.07, anchor="center")
+    root.bind('<Configure>', resize)
     second_label.pack()
 
 
