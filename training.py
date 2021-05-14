@@ -53,8 +53,8 @@ Yarr_hot = ku(Y)
 AUTO = tf.data.experimental.AUTOTUNE
 def get_features(model_name, data_preprocessor, data):
     """
-    1- Create a feature extractor to extract features from the data.
-    2- Returns the extracted features and the feature extractor.
+    Create a feature extractor to extract features from the data.
+    Returns the extracted features and the feature extractor.
     """
     dataset = tf.data.Dataset.from_tensor_slices(data)
 
@@ -66,7 +66,7 @@ def get_features(model_name, data_preprocessor, data):
     ds = dataset.map(preprocess, num_parallel_calls=AUTO).batch(64)
 
     input_size = data.shape[1:]
-
+    
     input_layer = Input(input_size)
     preprocessor = Lambda(data_preprocessor)(input_layer)
 
@@ -83,3 +83,27 @@ def get_features(model_name, data_preprocessor, data):
 
     return feature_maps
 
+
+def get_valfeatures(model_name, data_preprocessor, data):
+    '''
+    Used for feature extraction of validation and testing.
+    '''
+
+    dataset = tf.data.Dataset.from_tensor_slices(data)
+
+    ds = dataset.batch(64)
+
+    input_size = data.shape[1:]
+    #Prepare pipeline.
+    input_layer = Input(input_size)
+    preprocessor = Lambda(data_preprocessor)(input_layer)
+
+    base_model = model_name(weights='imagenet', include_top=False,
+                                    input_shape=input_size)(preprocessor)
+
+    avg = GlobalAveragePooling2D()(base_model)
+    feature_extractor = Model(inputs = input_layer, outputs = avg)
+    #Extract feature.
+    feature_maps = feature_extractor.predict(ds, verbose=1)
+    # print('Feature maps shape: ', feature_maps.shape)
+    return feature_maps
