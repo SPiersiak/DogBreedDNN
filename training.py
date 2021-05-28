@@ -131,3 +131,23 @@ inc_resnet_preprocessor = preprocess_input
 models = [InceptionV3, InceptionResNetV2, Xception, ]
 preprocs = [inception_preprocessor, inc_resnet_preprocessor,
             xception_preprocessor, ]
+
+
+# RETURNING CONCATENATED FEATURES USING MODELS AND PREPROCESSORS
+def get_concat_features(feat_func, models, preprocs, array):
+    print(f"Beggining extraction with {feat_func.__name__}\n")
+    feats_list = []
+
+    for i in range(len(models)):
+        print(f"\nStarting feature extraction with {models[i].__name__} using {preprocs[i].__name__}\n")
+        # applying the above function and storing in list
+        feats_list.append(feat_func(models[i], preprocs[i], array))
+
+    # features concatenating
+    final_feats = np.concatenate(feats_list, axis=-1)
+    # memory saving
+    del (feats_list, array)
+    gc.collect()
+
+    return final_feats
+
