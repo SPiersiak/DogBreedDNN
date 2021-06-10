@@ -2,7 +2,10 @@
 import gc
 
 # for warnings
+
+import operator
 import warnings
+
 warnings.filterwarnings("ignore")
 
 # utility libraries
@@ -56,7 +59,6 @@ gc.collect()
 
 Yarr_hot = to_categorical(Y)
 print(Xarr.shape, Yarr.shape)
-
 
 # FEATURE EXTRACTION OF TRAINING ARRAYS
 AUTO = tf.data.experimental.AUTOTUNE
@@ -137,6 +139,25 @@ def get_concat_features(feat_func, models, preprocs, array):
 
     return final_feats
 
+# RETURNING CONCATENATED FEATURES USING MODELS AND PREPROCESSORS
+def get_concat_features(feat_func, models, preprocs, array):
+    print(f"Beggining extraction with {feat_func.__name__}\n")
+    feats_list = []
+
+    for i in range(len(models)):
+        print(f"\nStarting feature extraction with {models[i].__name__} using {preprocs[i].__name__}\n")
+        # applying the above function and storing in list
+        feats_list.append(feat_func(models[i], preprocs[i], array))
+
+    # features concatenating
+    final_feats = np.concatenate(feats_list, axis=-1)
+    # memory saving
+    del (feats_list, array)
+    gc.collect()
+
+    return final_feats
+
+
 # Models and preprocessors
 
 from keras.applications.inception_v3 import InceptionV3, preprocess_input
@@ -161,15 +182,18 @@ preprocs = [inception_preprocessor, inc_resnet_preprocessor,
 
 final_train_features = get_concat_features(get_features, models, preprocs, Xarr)
 
-#del(x_train, )
+
+# del(x_train, )
 gc.collect()
 print('Final feature maps shape', final_train_features.shape)
 
 from keras.callbacks import EarlyStopping
 
+
 EarlyStop_callback = keras.callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True, verbose=0)
 
 my_callback=[EarlyStop_callback]
+
 
 from sklearn.model_selection import StratifiedKFold
 
@@ -179,11 +203,12 @@ trained_models = []
 accuracy = []
 losses = []
 
-#Prepare And Train DNN model
+
+# Prepare And Train DNN model
 
 for i, (train_idx, valid_idx) in enumerate(splits):
+    print(f"\nStarting fold {i + 1}\n")
 
-    print(f"\nStarting fold {i+1}\n")
     x_train_fold = final_train_features[train_idx, :]
     y_train_fold = Yarr_hot[train_idx, :]
     x_val_fold = final_train_features[valid_idx]
@@ -200,11 +225,14 @@ for i, (train_idx, valid_idx) in enumerate(splits):
                 metrics=['accuracy'])
 
     print("Training...")
-    #Train simple DNN on extracted features.
+
+    # Train simple DNN on extracted features.
+
     h = dnn.fit(x_train_fold, y_train_fold,
                 batch_size=128,
                 epochs=80,
                 verbose=0,
+
                 validation_data = (x_val_fold, y_val_fold),
                 callbacks=my_callback)  # max 95.07
 
@@ -215,11 +243,21 @@ for i, (train_idx, valid_idx) in enumerate(splits):
     losses.append(model_res[0])
     trained_models.append(dnn)
 
-print('\n CV Score -')
-print(f"\nAccuracy - {sum(accuracy)/len(accuracy)}")
-print(f"\nLoss - {sum(losses)/len(losses)}")
+
+print(f"\nAvg Accuracy - {sum(accuracy) / len(accuracy)}")
+print(f"\nAvg Loss - {sum(losses) / len(losses)}")
+
+best_accuracy_index, _ = max(enumerate(accuracy), key=operator.itemgetter(1))
+
+# serialize to JSON
+json_file = trained_models[best_accuracy_index].to_json()
+with open("model.json", "w") as file:
+    file.write(json_file)
+# serialize weights to HDF5
+trained_models[best_accuracy_index].save_weights("model.h5")
 
 # SAVING RAM
 
-del(final_train_features, Y, Yarr_hot, Xarr)
+del (final_train_features, Y, Yarr_hot, Xarr)
+
 gc.collect()
