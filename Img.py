@@ -1,7 +1,7 @@
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
-DEFAULT_RESOLUTION = (330, 330)
+DEFAULT_RESOLUTION = (500, 500)
 
 
 def upload_image():
@@ -16,4 +16,4 @@ def upload_image():
 
     except:
         pass
-    return ret
+    return ret, file_path
