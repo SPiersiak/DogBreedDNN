@@ -5,6 +5,10 @@ DEFAULT_RESOLUTION = (500, 500)
 
 
 def upload_image():
+    """
+    Upload image from local storage
+    :return: Selected Image, File path
+    """
     uploaded_image = None
     ret = uploaded_image
     try:

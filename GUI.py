@@ -4,9 +4,7 @@ import test as test
 import gc
 
 root = Tk()
-# Define min and max window size
-# root.minsize(1100, 650)
-# root.maxsize(1920, 1080)
+
 root.title('Dog Breed')
 root.geometry("1920x1080")
 
@@ -18,17 +16,14 @@ second_label = Label(root, image=bg)
 
 
 def main_window():
-    # def resize(e):
-    #     # adjust font size to window size
-    #     # print(e)
-    #     if e.width > 1600:
-    #         banner_text.config(font=("SimSun", int(50)))
-    #         take_photo_button.config(font=("Segoe UI", int(50)))
-    #     elif 1400 >= e.width > 900:
-    #         banner_text.config(font=("SimSun", int(30)))
-    #         take_photo_button.config(font=("Segoe UI", int(30)))
+    """
+    Display main window
+    """
 
     def move_to_second_label():
+        """
+        Move User to second view
+        """
         # Take image form user class
         z, path = img.upload_image()
         if z is not None:
@@ -53,30 +48,19 @@ def main_window():
                                activebackground='#fffff5', command=move_to_second_label)
     take_photo_button.place(relx=0.5, rely=0.75, anchor="center")
 
-    # root.bind('<Configure>', resize)
     main_label.pack()
     root.mainloop()
 
 
-
-
-
 def second_window(im, name, possible_name):
-    # def resize(e):
-    #     # adjust font size to window size
-    #     # print(e)
-    #     if e.width > 1600:
-    #         b_text.config(font=("SimSun", int(50)))
-    #         a_text.config(font=("Segoe UI", int(50)))
-    #         # check_button.config(font=("Segoe UI", int(50)))
-    #         back_button.config(font=("Segoe UI", int(50)))
-    #     elif 1400 >= e.width > 900:
-    #         b_text.config(font=("SimSun", int(30)))
-    #         a_text.config(font=("Segoe UI", int(30)))
-    #         # check_button.config(font=("Segoe UI", int(30)))
-    #         back_button.config(font=("Segoe UI", int(30)))
+    """
+    Display second window
+    """
 
     def move_to_first_label():
+        """
+        Move User to first view
+        """
         a_text.config(text="")
         w_text.config(text="")
         second_label.pack_forget()
@@ -97,7 +81,7 @@ def second_window(im, name, possible_name):
 
     # Text attribute - a place for the answer from the algorithm
     a_text = Label(second_label, text=name,
-                    font=("SimSun", 35), fg="black", bg="#fdf3e1")
+                   font=("SimSun", 35), fg="black", bg="#fdf3e1")
     a_text.place(relx=0.60, rely=0.5, anchor="w")
 
     # Text attribute - a place for the possible dog breed
@@ -109,14 +93,9 @@ def second_window(im, name, possible_name):
     w_text.place(relx=0.1, rely=0.9)
     w_text.config(anchor=CENTER)
 
-
     # Back Button
     back_button = Button(second_label, text="Back", font=("Segoe UI", 40), bg='#fffff5',
                          activebackground='#fffff5', command=move_to_first_label)
     back_button.place(relx=0.1, rely=0.07, anchor="center")
-    # root.bind('<Configure>', resize)
     second_label.pack()
     gc.collect()
-
-
-

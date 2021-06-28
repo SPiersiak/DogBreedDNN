@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import pandas as pd
@@ -13,7 +12,14 @@ from tensorflow.keras.optimizers import Adam
 
 from sklearn.model_selection import train_test_split
 
+
 def build_model(size, num_classes):
+    """
+    Build model
+    :param size: dimensions of image
+    :param num_classes: quantity of breeds
+    :return: built model
+    """
     inputs = Input((size, size, 3))
     backbone = MobileNetV2(input_tensor=inputs, include_top=False, weights="imagenet")
     backbone.trainable = True
@@ -26,14 +32,28 @@ def build_model(size, num_classes):
     model = tf.keras.Model(inputs, x)
     return model
 
+
 def read_image(path, size):
+    """
+    Read image from local storage
+    :param path: Path to image
+    :param size: Dimensions of image
+    :return: Image
+    """
     image = cv2.imread(path, cv2.IMREAD_COLOR)
     image = cv2.resize(image, (size, size))
     image = image / 255.0
     image = image.astype(np.float32)
     return image
 
+
 def parse_data(x, y):
+    """
+    Parse Data
+    :param x: coded image
+    :param y: breed index
+    :return: decoded image, and label
+    """
     x = x.decode()
 
     num_class = 120
@@ -47,11 +67,13 @@ def parse_data(x, y):
 
     return image, label
 
+
 def tf_parse(x, y):
     x, y = tf.numpy_function(parse_data, [x, y], [tf.float32, tf.int32])
     x.set_shape((224, 224, 3))
     y.set_shape((120))
     return x, y
+
 
 def tf_dataset(x, y, batch=8):
     dataset = tf.data.Dataset.from_tensor_slices((x, y))
@@ -59,6 +81,7 @@ def tf_dataset(x, y, batch=8):
     dataset = dataset.batch(batch)
     dataset = dataset.repeat()
     return dataset
+
 
 if __name__ == "__main__":
     path = "input/"
@@ -81,8 +104,8 @@ if __name__ == "__main__":
         breed_idx = breed2id[breed_name]
         labels.append(breed_idx)
 
-   # ids = ids[:1000]
-   # labels = labels[:1000]
+    # ids = ids[:1000]
+    # labels = labels[:1000]
 
     ## Spliting the dataset
     train_x, valid_x = train_test_split(ids, test_size=0.2, random_state=42)
@@ -109,11 +132,11 @@ if __name__ == "__main__":
         ModelCheckpoint("model.h5", verbose=1, save_best_only=True),
         ReduceLROnPlateau(factor=0.1, patience=5, min_lr=1e-6)
     ]
-    train_steps = (len(train_x)//batch) + 1
-    valid_steps = (len(valid_x)//batch) + 1
+    train_steps = (len(train_x) // batch) + 1
+    valid_steps = (len(valid_x) // batch) + 1
     model.fit(train_dataset,
-        steps_per_epoch=train_steps,
-        validation_steps=valid_steps,
-        validation_data=valid_dataset,
-        epochs=epochs,
-        callbacks=callbacks)
+              steps_per_epoch=train_steps,
+              validation_steps=valid_steps,
+              validation_data=valid_dataset,
+              epochs=epochs,
+              callbacks=callbacks)
